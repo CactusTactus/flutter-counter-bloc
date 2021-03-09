@@ -10,7 +10,6 @@ class Counter extends StatefulWidget {
 
 class _CounterState extends State<Counter> {
   CounterBloc _counterBloc;
-  double _iconSize;
   double _fontSize;
 
   @override
@@ -22,9 +21,7 @@ class _CounterState extends State<Counter> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final mediaQuery = MediaQuery.of(context);
-    _iconSize = mediaQuery.size.shortestSide * 0.1;
-    _fontSize = mediaQuery.size.shortestSide * 0.2;
+    _fontSize = MediaQuery.of(context).size.shortestSide * 0.2;
   }
 
   @override
@@ -35,30 +32,34 @@ class _CounterState extends State<Counter> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       mainAxisSize: MainAxisSize.min,
       children: [
-        IconButton(
-          icon: Icon(
-            Icons.add,
-            size: _iconSize,
-          ),
-          onPressed: () => _counterBloc.counterEventSink.add(IncrementEvent()),
-          padding: const EdgeInsets.all(0),
-        ),
         CounterText(
           counterBloc: _counterBloc,
           fontSize: _fontSize,
         ),
-        IconButton(
-          icon: Icon(
-            Icons.remove,
-            size: _iconSize,
-          ),
-          onPressed: () => _counterBloc.counterEventSink.add(DecrementEvent()),
-          padding: const EdgeInsets.all(0),
+        const SizedBox(height: 10),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            FloatingActionButton(
+              child: const Icon(Icons.remove),
+              backgroundColor: Colors.blue,
+              onPressed: () =>
+                  _counterBloc.counterEventSink.add(DecrementEvent()),
+            ),
+            const SizedBox(width: 20),
+            FloatingActionButton(
+              child: const Icon(Icons.add),
+              backgroundColor: Colors.red,
+              onPressed: () =>
+                  _counterBloc.counterEventSink.add(IncrementEvent()),
+            ),
+          ],
         ),
       ],
     );
